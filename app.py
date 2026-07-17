@@ -1234,7 +1234,13 @@ def inject_css():
             font-family: 'Outfit', sans-serif !important;
         }}
 
+        /* Hide Streamlit's header toolbar (Share / GitHub / edit / menu) from visitors */
+        header[data-testid="stHeader"] {{ display:none !important; }}
+        #MainMenu, [data-testid="stToolbar"], [data-testid="stDecoration"],
+        [data-testid="stStatusWidget"] {{ display:none !important; visibility:hidden; }}
+
         .stApp {{ background:#F7F7F9; color:var(--pl-ink); }}
+        .block-container {{ padding-top: 1.2rem; }}
         .block-container {{ padding-top: 1.4rem; max-width: 1100px; }}
 
         .hero {{
