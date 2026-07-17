@@ -6,7 +6,7 @@ on:
     # (GitHub cron is UTC; Prague is UTC+2 until 25 Oct 2026.)
     # Kickoffs are 13:30-21:00 Prague, matches end ~2h later, so every
     # possible final whistle falls inside this window.
-    - cron: "*/20 13-21 * * 5,6,0,1"
+    - cron: "*/10 13-21 * * 5,6,0,1"
     # Weekly safety sweep (Tuesday 11:00 Prague) — catches skipped runs
     # or matches rescheduled outside Fri-Mon.
     - cron: "0 9 * * 2"
