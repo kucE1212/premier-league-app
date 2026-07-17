@@ -1241,8 +1241,8 @@ def inject_css():
             position:relative;
             overflow:hidden;
             background: linear-gradient(100deg, var(--pl-cyan) 0%, var(--pl-blue) 56%, var(--pl-purple) 100%);
-            border-radius: 18px 18px 0 0;
-            padding: 24px 34px 30px;
+            border-radius: 18px;
+            padding: 22px 34px 72px;   /* bottom padding hosts the overlaid tab strip */
             color:#FFFFFF;
             margin-bottom: 0;
             box-shadow: 0 12px 32px rgba(55, 0, 60, .12);
@@ -1300,23 +1300,33 @@ def inject_css():
             font-weight:500;
         }}
         @media (max-width: 700px) {{
-            .hero {{ padding: 20px 20px 24px; }}
+            .hero {{ padding: 18px 20px 66px; }}
             .hero-inner {{ gap:14px; }}
             .hero-logo {{ width:132px; max-width:38vw; }}
         }}
 
         /* Premier-League-style navigation for every Streamlit tab group. */
-        .stTabs [data-baseweb="tab-list"] {{
+        /* Premier-League-style nav: the tab strip overlays the hero's bottom edge
+           as a translucent darker band, so the hero gradient runs through it. */
+        div[data-testid="stTabs"] {{
+            margin-top: -46px;  /* strip height -> sits flush on the hero's bottom edge */
+            position: relative;
+            z-index: 2;
+        }}
+        .stTabs [data-baseweb="tab-list"],
+        .stTabs [role="tablist"] {{
             gap: 2px;
             min-height: 46px;
             padding: 0 12px;
             margin-top: 0;
             overflow-x: auto;
-            background: linear-gradient(90deg, var(--pl-nav-left) 0%, #3F4B9B 52%, var(--pl-nav-right) 100%);
-            border-radius: 0 0 12px 12px;
-            box-shadow: 0 8px 18px rgba(43, 0, 75, .16);
+            background: rgba(27, 0, 51, .30);
+            border: 0;
+            border-radius: 0 0 18px 18px;
+            box-shadow: none;
         }}
-        .stTabs [data-baseweb="tab"] {{
+        .stTabs [data-baseweb="tab"],
+        .stTabs [data-testid="stTab"] {{
             height: 46px;
             min-width: auto;
             padding: 0 14px;
@@ -1325,29 +1335,53 @@ def inject_css():
             border-bottom: 3px solid transparent;
             border-radius: 0;
             background: transparent;
-            color: rgba(255,255,255,.82);
+            color: rgba(255,255,255,.85);
             font-size: .92rem;
             font-weight: 500;
             white-space: nowrap;
             transition: color .15s ease, background .15s ease, border-color .15s ease;
         }}
-        .stTabs [data-baseweb="tab"] p {{
+        .stTabs [data-baseweb="tab"] p,
+        .stTabs [data-testid="stTab"] p {{
             color: inherit !important;
             font-size: inherit !important;
             font-weight: inherit !important;
         }}
-        .stTabs [data-baseweb="tab"]:hover {{
+        .stTabs [data-baseweb="tab"]:hover,
+        .stTabs [data-testid="stTab"]:hover {{
             color:#fff;
             background:rgba(255,255,255,.08);
         }}
-        .stTabs [data-baseweb="tab"][aria-selected="true"] {{
+        .stTabs [data-baseweb="tab"][aria-selected="true"],
+        .stTabs [data-testid="stTab"][aria-selected="true"] {{
             color:#fff;
             font-weight:700;
             background:rgba(255,255,255,.06);
             border-bottom-color:#fff;
         }}
         .stTabs [data-baseweb="tab-highlight"],
-        .stTabs [data-baseweb="tab-border"] {{ display:none; }}
+        .stTabs [data-baseweb="tab-border"],
+        .stTabs [data-testid="stTabHighlight"],
+        .stTabs [data-testid="stTabBorder"] {{ display:none; }}
+        .stTabs [role="tablist"]::after {{ display:none; }}   /* Streamlit's grey base line */
+        /* Streamlit's built-in red active-tab indicator (absolute 2px div inside the tab) */
+        .stTabs [data-testid="stTab"] > div:not([data-testid="stMarkdownContainer"]) {{ display:none !important; }}
+        .stTabs [role="tablist"] {{ scrollbar-width:none; -ms-overflow-style:none; }}
+        .stTabs [role="tablist"]::-webkit-scrollbar {{ display:none; height:0; width:0; }}
+        /* Overflow scroll arrows: match the dark band instead of white fade */
+        .stTabs [data-testid="stTabsScrollLeft"],
+        .stTabs [data-testid="stTabsScrollRight"] {{
+            border:0;
+            color:#fff;
+        }}
+        .stTabs [data-testid="stTabsScrollRight"] {{
+            background:linear-gradient(to right, rgba(39,0,80,0), rgba(39,0,80,.65) 70%) !important;
+        }}
+        .stTabs [data-testid="stTabsScrollLeft"] {{
+            background:linear-gradient(to left, rgba(39,0,80,0), rgba(39,0,80,.65) 70%) !important;
+        }}
+        .stTabs [data-testid="stTabsScrollLeft"] svg,
+        .stTabs [data-testid="stTabsScrollRight"] svg {{ fill:#fff !important; color:#fff !important; }}
         .stTabs [data-baseweb="tab-panel"] {{ padding-top: 1.15rem; }}
 
         .leaderboard-card {{
@@ -3140,7 +3174,6 @@ def main():
             <img class='hero-logo' src='data:image/svg+xml;base64,{PL_LOGO_B64}' alt='Logo Premier League'>
             <div class='hero-copy'>
               <h1>Tipovačka 2026/27</h1>
-              <p>Tipni skóre. Přesný výsledek 3 · správný rozdíl 2 · správný vítěz 1.</p>
             </div>
           </div>
         </div>
