@@ -1,0 +1,30 @@
+name: Sync PL results to Google Sheet
+ 
+on:
+  schedule:
+    # Every 2 hours. GitHub cron is UTC; matches finish ~2h after kickoff,
+    # so scores land in the sheet within ~2-3 hours of full time.
+    - cron: "0 */2 * * *"
+  workflow_dispatch: {}   # manual "Run workflow" button as a fallback
+ 
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+ 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+ 
+      - name: Install dependencies
+        run: pip install requests gspread google-auth
+ 
+      - name: Sync results
+        env:
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+          GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+          SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
+          FD_SEASON: "2026"
+        run: python sync_results.py
