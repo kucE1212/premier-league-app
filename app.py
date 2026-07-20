@@ -2048,8 +2048,8 @@ def predictions_panel(players, fixtures, predictions, rounds_with_issues):
         )
 
     codes = {norm_code(p["code"]) for p in active_players(players)}
-    raw_code = st.text_input("Tvůj hráčský kód", key="pred_code",
-                             placeholder="např. JANN").strip()
+    raw_code = st.text_input("Tvůj hráčský kód (heslo z registrace)", key="pred_code",
+                             placeholder="Heslo z registrace (Heslo nikomu nikdy neříkej)").strip()
     if not raw_code:
         st.info("Zadej svůj kód a načtou se zápasy k natipování.")
         return
