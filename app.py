@@ -46,7 +46,7 @@ TZ = ZoneInfo("Europe/Prague")
 TOTAL_ROUNDS = 8
 DEFAULT_ZOLIKY = 3   # each player starts with 3 jokers (rule 6.1)
 MAX_ZOLIKY = 13      # hard ceiling per player: 3 base + 10 purchased (rules 6.1–6.2)
-BANK_PER_PLAYER = 750
+BANK_PER_PLAYER = 500
 ZOLIK_PRICE = 50
 PRIZE_SPLIT = (0.50, 0.30, 0.20)
 
