@@ -3087,7 +3087,7 @@ def registration_panel(players, registrations):
 
     with col_form:
         name = st.text_input("Jméno a příjmení", key="reg_name", placeholder="např. Jan Novák")
-        code = st.text_input("Zvol si svůj hráčský kód", key="reg_code",
+        code = st.text_input("Zvol si svůj hráčský kód(HESLO!!)", key="reg_code",
                              placeholder="např. JANN (3–20 znaků, jen písmena a čísla)")
         email = st.text_input("E-mail", key="reg_email", placeholder="např. jan@email.cz")
 
