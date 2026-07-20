@@ -2,15 +2,14 @@ name: Sync PL results to Google Sheet
  
 on:
   schedule:
-    # Every 20 minutes during the result window: Fri-Mon, 15:00-23:40 Prague.
-    # (GitHub cron is UTC; Prague is UTC+2 until 25 Oct 2026.)
-    # Kickoffs are 13:30-21:00 Prague, matches end ~2h later, so every
-    # possible final whistle falls inside this window.
-    - cron: "*/10 13-21 * * 5,6,0,1"
-    # Weekly safety sweep (Tuesday 11:00 Prague) — catches skipped runs
-    # or matches rescheduled outside Fri-Mon.
-    - cron: "0 9 * * 2"
-  workflow_dispatch: {}   # manual "Run workflow" button as a fallback
+    # Backstop only — cron-job.org drives the real cadence.
+    - cron: "0 9 * * 2"          # Tue 11:00 Prague weekly sweep
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Log changes without writing to the sheet"
+        type: boolean
+        default: false
  
 jobs:
   sync:
@@ -32,4 +31,5 @@ jobs:
           GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
           SPREADSHEET_ID: ${{ secrets.SPREADSHEET_ID }}
           FD_SEASON: "2026"
+          DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
         run: python sync_results.py
